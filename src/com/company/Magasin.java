@@ -1,9 +1,6 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Magasin {
@@ -12,7 +9,24 @@ public class Magasin {
     List<Produit> inventaire = new ArrayList<>();
     public int totalProduct = 0;
 
-    public void addProduct(Produit produit) {
+    public void addProduct() {
+        System.out.println("Quel est le nom du produit ?");
+        String nom = scan.nextLine();
+
+        System.out.println("Quel sera son prix ?");
+        int prix = scan.nextInt();
+
+        System.out.println("Quelle sera sa marque ?");
+        String marque = scan.nextLine();
+
+        System.out.println("Quel sera son type ? " + Arrays.toString(Types.values()));
+        Types type = (Types)scan.nextLine(); // Comment mettre le type via l'énum ?
+
+        System.out.println("Quel sera sont stock");
+        int stock = scan.nextInt();
+
+        Produit produit = new Produit(nom,prix,marque,type,stock);
+
         if (totalProduct + produit.getStock() <= 1000) {
             inventaire.add(produit);
         } else {
@@ -21,7 +35,11 @@ public class Magasin {
         totalProduct += produit.getStock();
     }
 
-    public void deleteProduct(Produit produit) {
+    public void deleteProduct() {
+        System.out.println("Quel est le nom de produit que tu souhaites supprimer ?");
+        String name = scan.nextLine();
+
+        Produit produit; // Find le produit dans le magasin
         totalProduct -= produit.getStock();
         inventaire.remove(produit);
     }
@@ -68,7 +86,9 @@ public class Magasin {
     }
 
     public void search() {
+        // Proposer les critères
 
+        // Faire la recherche en fonction du critère sélectionné + les afficher
     }
 
     public void searchBrand() {
@@ -77,5 +97,10 @@ public class Magasin {
         // Quand l'utilisateur à choisi la brand faire la recherche là-dessus
     }
 
+    public void showProduct() {
+        // Vérifier si le produit existe (findAny)
+
+        // Utiliser les streams pour afficher ces produits
+    }
 
 }
