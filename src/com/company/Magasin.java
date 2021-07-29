@@ -1,6 +1,5 @@
 package com.company;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,7 +93,7 @@ public class Magasin {
         Produit produit = new Produit(nom,prix,marque,type,stock);
 
         if (totalProduct + produit.getStock() <= 1000) {
-            inventaire.add(produit);
+            this.inventaire.add(produit);
         } else {
             System.out.println("Vous ne pouvez pas rajouter ce produit par manque de stock disponible");
         }
@@ -105,12 +104,12 @@ public class Magasin {
         System.out.println("Quel est le nom de produit que tu souhaites supprimer ?");
         String name = scan.nextLine();
 
-        List<Produit> produit = inventaire.stream()
+        List<Produit> produit = this.inventaire.stream()
                 .filter((product) -> Objects.equals(product.getNom(), name))
                 .collect(Collectors.toList()); // Find le produit dans le magasin
 
         totalProduct -= produit.get(0).getStock();
-        inventaire.remove(produit.get(0));
+        this.inventaire.remove(produit.get(0));
 
         System.out.println("Success");
     }
@@ -122,12 +121,13 @@ public class Magasin {
         int nbr = scan.nextInt();
 
         if (totalProduct + nbr <= 1000) {
-            List<Produit> produit = inventaire.stream()
+            List<Produit> produit = this.inventaire.stream()
                     .filter((product) -> Objects.equals(product.getNom(), name))
                     .collect(Collectors.toList()); // Find le produit dans le magasin
 
-            int index = inventaire.indexOf(produit.get(0));
-            inventaire.get(index).setStock(inventaire.get(index).getStock() + nbr);
+            int index = this.inventaire.indexOf(produit.get(0));
+            this.inventaire.get(index).setStock(this.inventaire.get(index).getStock() + nbr);
+            totalProduct += nbr;
 
             System.out.println("Success");
         }
@@ -139,17 +139,17 @@ public class Magasin {
         List<Produit> productSorted = null;
         switch (typeOfSort){
             case "prix":
-                productSorted = inventaire.stream()
+                productSorted = this.inventaire.stream()
                         .sorted(Comparator.comparing(Produit::getPrix))
                         .collect(Collectors.toList());
                 break;
             case "type":
-                productSorted = inventaire.stream()
+                productSorted = this.inventaire.stream()
                         .sorted(Comparator.comparing(Produit::getType))
                         .collect(Collectors.toList());
                 break;
             case "quantité":
-                productSorted = inventaire.stream()
+                productSorted = this.inventaire.stream()
                         .sorted(Comparator.comparing(Produit::getStock))
                         .collect(Collectors.toList());
                 break;
@@ -168,13 +168,79 @@ public class Magasin {
         String typeOfSearch = scan.nextLine();
 
 
-        // Faire la recherche en fonction du critère sélectionné + les afficher
+        // Faire la recherche en fonction des critères sélectionnés + les afficher
+        switch (typeOfSearch) {
+            case "prix min":
+                minPrice(this.inventaire);
+                break;
+            case "prix max":
+                maxPrice(this.inventaire);
+                break;
+            case "type":
+                listType(this.inventaire);
+                break;
+            case "nom":
+                listName(this.inventaire);
+                break;
+            default:
+                System.out.println("Le type est incorrect");
+        }
+    }
+
+    public Produit minPrice(List<Produit> list) {
+        Produit productMin = list.stream()
+                .min((product1, product2) -> (int) (product1.getPrix() - product2.getPrix()))
+                .get();
+        System.out.println(productMin);
+        return productMin;
+    }
+
+    public Produit maxPrice(List<Produit> list) {
+        Produit productMax = list.stream()
+                .max((product1, product2) -> (int) (product1.getPrix() - product2.getPrix()))
+                .get();
+        System.out.println(productMax);
+        return productMax;
+    }
+
+    public List<Produit> listType(List<Produit> list) {
+        System.out.println("Quel est le type que vous voulez chercher ? " + Arrays.toString(Types.values()));
+        String typeString = scan.nextLine().toLowerCase(Locale.ROOT);
+        Types type = null;
+        switch (typeString) {
+            case "comestible":
+                type = Types.COMESTIBLE;
+                break;
+            case "petit":
+                type = Types.PETIT;
+                break;
+            case "gros":
+                type = Types.GROS;
+                break;
+            default:
+                System.out.println("Le type rentré est incorrect, il sera mis sur null");
+                break;
+        }
+        Types finalType = type;
+        return list.stream()
+                .filter((product) -> product.getType() == finalType)
+                .peek(System.out::println)
+                .collect(Collectors.toList());
+    }
+
+    public List<Produit> listName(List<Produit> list) {
+        System.out.println("Quel est le nom que vous voulez cherchez ?");
+        String name = scan.nextLine();
+        return list.stream()
+                .filter((product) -> Objects.equals(product.getNom(), name))
+                .peek(System.out::println)
+                .collect(Collectors.toList());
     }
 
     public void searchBrand() {
         // Récup les brands et les afficher
         System.out.println("Voici les différentes marques présentes dans le magasin :");
-        inventaire.stream()
+        this.inventaire.stream()
                 .map(Produit::getMarque)
                 .distinct()
                 .forEach(System.out::println);
@@ -182,7 +248,7 @@ public class Magasin {
         // Quand l'utilisateur à choisi la brand faire la recherche là-dessus
         System.out.println("Quel est la marque dont tu veux voir les produits associés ?");
         String brandName = scan.nextLine();
-        inventaire.stream()
+        this.inventaire.stream()
                 .filter((product) -> Objects.equals(product.getMarque(), brandName))
                 .forEach(System.out::println);
     }
@@ -190,13 +256,13 @@ public class Magasin {
     public void showProduct() {
         System.out.println("Vérification s'il existe un produit avec moins de 10 unités en stock");
         // Vérifier si le produit existe
-        boolean rslt = inventaire.stream()
+        boolean rslt = this.inventaire.stream()
                 .anyMatch((product) -> product.getStock() < 10);
 
         // Utiliser les streams pour afficher ces produits
         if (rslt) {
             System.out.println("Il y a ce(s) produit(s) dans l'inventaire :");
-            inventaire.stream()
+            this.inventaire.stream()
                     .filter((product) -> product.getStock() < 10)
                     .forEach(System.out::println);
         } else {

@@ -16,6 +16,7 @@ public class Main {
         magasin.inventaire.add(prod3);
         magasin.inventaire.add(prod4);
 
-        magasin.launchProgram();
+//        magasin.launchProgram();
+        System.out.println(magasin.listName(magasin.inventaire));
     }
 }
