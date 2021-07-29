@@ -1,5 +1,6 @@
 package com.company;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,13 +16,15 @@ public class Magasin {
         System.out.println("Bienvenue dans ton programme d'inventaire !");
         System.out.println("Tu as le choix entre différentes fonctionnalités.");
         while (continueProgram) {
-            System.out.print("1. Rajouter un produit \n" +
-                    "2. Supprimer un produit \n" +
-                    "3. Rajouter du stock à un produit \n" +
-                    "4. Afficher une liste triée de l'inventaire \n" +
-                    "5. Faire une recherche dans l'inventaire \n" +
-                    "6. Voir les produits associés à une marque \n" +
-                    "7. Voir les produits dont le stocks est faible (moins de 10 unités) \n");
+            System.out.print("""
+                    1. Rajouter un produit\s
+                    2. Supprimer un produit\s
+                    3. Rajouter du stock à un produit\s
+                    4. Afficher une liste triée de l'inventaire\s
+                    5. Faire une recherche dans l'inventaire\s
+                    6. Voir les produits associés à une marque\s
+                    7. Voir les produits dont le stocks est faible (moins de 10 unités)\s
+                    """);
             choice = scan.nextInt();
             scan.nextLine();
             switch (choice) {
@@ -58,7 +61,7 @@ public class Magasin {
 
     public void addProduct() {
         System.out.println("Quel est le nom du produit ?");
-        String nom = scan.nextLine();
+        String nom = scan.nextLine().toLowerCase(Locale.ROOT);
 
         System.out.println("Quel sera son prix ?");
         int prix = scan.nextInt();
@@ -68,7 +71,22 @@ public class Magasin {
         String marque = scan.nextLine();
 
         System.out.println("Quel sera son type ? " + Arrays.toString(Types.values()));
-        Types type = Types.COMESTIBLE; // Comment mettre le type via l'énum ?
+        String typeString = scan.nextLine().toLowerCase(Locale.ROOT);
+        Types type = null;
+        switch (typeString) {
+            case "comestible":
+                type = Types.COMESTIBLE;
+                break;
+            case "petit":
+                type = Types.PETIT;
+                break;
+            case "gros":
+                type = Types.GROS;
+                break;
+            default:
+                System.out.println("Le type rentré est incorrect, il sera mis sur null");
+                break;
+        }
 
         System.out.println("Quel sera sont stock");
         int stock = scan.nextInt();
@@ -148,23 +166,7 @@ public class Magasin {
         System.out.println("Il est possible de faire des recherches dans le magasin. Selon des critères de prix (min/max), de type et/ou de nom.");
         System.out.println("Les possibilités : prix min / prix max / type / nom");
         String typeOfSearch = scan.nextLine();
-        switch (typeOfSearch) {
-            case "prix min":
 
-                break;
-            case "prix max":
-
-                break;
-            case "type":
-
-                break;
-            case "nom":
-
-                break;
-            default:
-                System.out.println("Tu n'as pas entré une commande correcte");
-                break;
-        }
 
         // Faire la recherche en fonction du critère sélectionné + les afficher
     }
@@ -173,7 +175,8 @@ public class Magasin {
         // Récup les brands et les afficher
         System.out.println("Voici les différentes marques présentes dans le magasin :");
         inventaire.stream()
-                .map(Produit::getMarque) // Ne faire apparaître chaque marque qu'une fois
+                .map(Produit::getMarque)
+                .distinct()
                 .forEach(System.out::println);
 
         // Quand l'utilisateur à choisi la brand faire la recherche là-dessus
