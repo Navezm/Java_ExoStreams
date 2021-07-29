@@ -137,9 +137,20 @@ public class Magasin {
     }
 
     public void showProduct() {
+        System.out.println("Vérification s'il existe un produit avec moins de 10 unités en stock");
         // Vérifier si le produit existe (findAny)
+        boolean rslt = inventaire.stream()
+                .anyMatch((product) -> product.getStock() < 10);
 
         // Utiliser les streams pour afficher ces produits
+        if (rslt) {
+            System.out.println("Il y a ce(s) produit(s) dans l'inventaire :");
+            inventaire.stream()
+                    .filter((product) -> product.getStock() < 10)
+                    .forEach(System.out::println);
+        } else {
+            System.out.println("Il n'y a pas de produit avec un petit stock");
+        }
     }
 
 }

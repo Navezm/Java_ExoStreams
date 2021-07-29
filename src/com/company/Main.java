@@ -4,12 +4,12 @@ public class Main {
 
     public static void main(String[] args) {
         Produit prod = new Produit("chocolat", 10, "Cote d'or", Types.COMESTIBLE, 20);
-        Produit prod1 = new Produit("lait", 10, "Cote d'or", Types.COMESTIBLE, 20);
+        Produit prod1 = new Produit("lait", 10, "Cote d'or", Types.COMESTIBLE, 10);
         Produit prod2 = new Produit("bonbon", 10, "Cote d'or", Types.COMESTIBLE, 20);
         Produit prod3 = new Produit("chocolat", 10, "Cha", Types.COMESTIBLE, 20);
         Produit prod4 = new Produit("chocolat", 10, "Deluxe", Types.COMESTIBLE, 20);
 
-        System.out.println(prod);
+//        System.out.println(prod);
 
         Magasin magasin = new Magasin();
         magasin.inventaire.add(prod);
@@ -22,6 +22,8 @@ public class Main {
 
 //        magasin.inventaire.forEach(System.out::println);
 
-        magasin.searchBrand();
+//        magasin.searchBrand();
+
+        magasin.showProduct();
     }
 }
