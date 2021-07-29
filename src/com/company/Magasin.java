@@ -9,12 +9,60 @@ public class Magasin {
     List<Produit> inventaire = new ArrayList<>();
     public int totalProduct = 0;
 
+    public void launchProgram() {
+        int choice = 0;
+        boolean continueProgram = true;
+        System.out.println("Bienvenue dans ton programme d'inventaire !");
+        System.out.println("Tu as le choix entre différentes fonctionnalités.");
+        while (continueProgram) {
+            System.out.print("1. Rajouter un produit \n" +
+                    "2. Supprimer un produit \n" +
+                    "3. Rajouter du stock à un produit \n" +
+                    "4. Afficher une liste triée de l'inventaire \n" +
+                    "5. Faire une recherche dans l'inventaire \n" +
+                    "6. Voir les produits associés à une marque \n" +
+                    "7. Voir les produits dont le stocks est faible (moins de 10 unités) \n");
+            choice = scan.nextInt();
+            scan.nextLine();
+            switch (choice) {
+                case 1:
+                    addProduct();
+                    break;
+                case 2:
+                    deleteProduct();
+                    break;
+                case 3:
+                    addStock();
+                    break;
+                case 4:
+                    sort();
+                    break;
+                case 5:
+                    search();
+                    break;
+                case 6:
+                    searchBrand();
+                    break;
+                case 7:
+                    showProduct();
+                    break;
+            }
+            System.out.println("Veux tu continuer à utiliser le programme ? (true / false)");
+            String answer = scan.nextLine();
+            if (Objects.equals(answer, "false")) {
+                continueProgram = false;
+                System.out.println("Merci d'avoir utilisé ce programme");
+            }
+        }
+    }
+
     public void addProduct() {
         System.out.println("Quel est le nom du produit ?");
         String nom = scan.nextLine();
 
         System.out.println("Quel sera son prix ?");
         int prix = scan.nextInt();
+        scan.nextLine();
 
         System.out.println("Quelle sera sa marque ?");
         String marque = scan.nextLine();
@@ -50,9 +98,9 @@ public class Magasin {
     }
 
     public void addStock() {
-        System.out.println("Quel est le nom du produit que auquel tu veux ajouter du stock ?");
+        System.out.println("Quel est le nom du produit auquel tu veux ajouter du stock ?");
         String name = scan.nextLine();
-        System.out.println("Quel est le nombre que tu veux rajouter au stock ?");
+        System.out.println("Quel est le nombre que tu veux rajouter a ce stock ?");
         int nbr = scan.nextInt();
 
         if (totalProduct + nbr <= 1000) {
@@ -138,7 +186,7 @@ public class Magasin {
 
     public void showProduct() {
         System.out.println("Vérification s'il existe un produit avec moins de 10 unités en stock");
-        // Vérifier si le produit existe (findAny)
+        // Vérifier si le produit existe
         boolean rslt = inventaire.stream()
                 .anyMatch((product) -> product.getStock() < 10);
 

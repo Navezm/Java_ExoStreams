@@ -24,6 +24,7 @@ public class Main {
 
 //        magasin.searchBrand();
 
-        magasin.showProduct();
+//        magasin.showProduct();
+        magasin.launchProgram();
     }
 }
