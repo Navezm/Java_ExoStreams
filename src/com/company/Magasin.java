@@ -97,14 +97,43 @@ public class Magasin {
 
     public void search() {
         // Proposer les critères
+        System.out.println("Il est possible de faire des recherches dans le magasin. Selon des critères de prix (min/max), de type et/ou de nom.");
+        System.out.println("Les possibilités : prix min / prix max / type / nom");
+        String typeOfSearch = scan.nextLine();
+        switch (typeOfSearch) {
+            case "prix min":
+
+                break;
+            case "prix max":
+
+                break;
+            case "type":
+
+                break;
+            case "nom":
+
+                break;
+            default:
+                System.out.println("Tu n'as pas entré une commande correcte");
+                break;
+        }
 
         // Faire la recherche en fonction du critère sélectionné + les afficher
     }
 
     public void searchBrand() {
         // Récup les brands et les afficher
+        System.out.println("Voici les différentes marques présentes dans le magasin :");
+        inventaire.stream()
+                .map(Produit::getMarque) // Ne faire apparaître chaque marque qu'une fois
+                .forEach(System.out::println);
 
         // Quand l'utilisateur à choisi la brand faire la recherche là-dessus
+        System.out.println("Quel est la marque dont tu veux voir les produits associés ?");
+        String brandName = scan.nextLine();
+        inventaire.stream()
+                .filter((product) -> Objects.equals(product.getMarque(), brandName))
+                .forEach(System.out::println);
     }
 
     public void showProduct() {
