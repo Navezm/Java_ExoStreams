@@ -20,7 +20,7 @@ public class Magasin {
         String marque = scan.nextLine();
 
         System.out.println("Quel sera son type ? " + Arrays.toString(Types.values()));
-        Types type = (Types)scan.nextLine(); // Comment mettre le type via l'énum ?
+        Types type = Types.COMESTIBLE; // Comment mettre le type via l'énum ?
 
         System.out.println("Quel sera sont stock");
         int stock = scan.nextInt();
@@ -39,9 +39,14 @@ public class Magasin {
         System.out.println("Quel est le nom de produit que tu souhaites supprimer ?");
         String name = scan.nextLine();
 
-        Produit produit; // Find le produit dans le magasin
-        totalProduct -= produit.getStock();
-        inventaire.remove(produit);
+        List<Produit> produit = inventaire.stream()
+                .filter((product) -> Objects.equals(product.getNom(), name))
+                .collect(Collectors.toList()); // Find le produit dans le magasin
+
+        totalProduct -= produit.get(0).getStock();
+        inventaire.remove(produit.get(0));
+
+        System.out.println("Success");
     }
 
     public void addStock() {
@@ -51,9 +56,14 @@ public class Magasin {
         int nbr = scan.nextInt();
 
         if (totalProduct + nbr <= 1000) {
-            inventaire.stream()
-                    .filter(element -> element.getNom().equals(name));
-//                    .map(produit -> produit.setStock(produit.getStock()+nbr));
+            List<Produit> produit = inventaire.stream()
+                    .filter((product) -> Objects.equals(product.getNom(), name))
+                    .collect(Collectors.toList()); // Find le produit dans le magasin
+
+            int index = inventaire.indexOf(produit.get(0));
+            inventaire.get(index).setStock(inventaire.get(index).getStock() + nbr);
+
+            System.out.println("Success");
         }
     }
 
